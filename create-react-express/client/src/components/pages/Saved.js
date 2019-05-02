@@ -47,6 +47,7 @@ class Saved extends Component {
                     url={book.link}
                     id={book._id}
                     image={book.image}
+                    author={book.authors}
                     title={book.title}
                     description={book.description}
                     key={book._id}

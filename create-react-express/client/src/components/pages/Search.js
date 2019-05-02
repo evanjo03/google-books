@@ -5,6 +5,7 @@ import DisplayCard from "../DisplayCard"
 
 
 
+
 class Search extends Component {
     state = {
         results: [],
@@ -29,7 +30,21 @@ class Search extends Component {
         //search
         API.searchBooks(this.state.search)
             .then(res => {
-                this.setState({ results: res.data.items })
+                var safeResults = [];
+                // Clean up / unify API results 
+                res.data.items.forEach((book) => {
+                    if (book.volumeInfo.authors === undefined) {
+                        book.volumeInfo.authors = "No Author";
+                    } else {
+                        book.volumeInfo.authors = book.volumeInfo.authors[0]
+
+                        if (book.volumeInfo.imageLinks === undefined) {
+                            book.volumeInfo.imageLinks.thumbnail = "No Image";
+                        }
+                        safeResults.push(book);
+                    }
+                });
+                this.setState({ results: safeResults })
                 console.log(this.state)
             })
             .catch(err => {
@@ -45,7 +60,7 @@ class Search extends Component {
 
     handleSave = (ob) => {
         console.log(ob)
-            API.saveBook(ob)
+        API.saveBook(ob)
             .then(res => console.log(res))
             .catch(err => console.log(err));
     }
@@ -56,44 +71,52 @@ class Search extends Component {
                 <Container>
                     <Row>
                         <Col>
-                            <Card>
-                                <Card.Body>
-                                    <Card.Title>Search for a book!</Card.Title>
-                                    <Form.Control name="search"
-                                        value={this.state.search}
-                                        onChange={this.handleInputChange}
-                                        type="text"
-                                        variant="primary"
-                                        size="lg"
-                                        className="p-2 m-2"
-                                        placeholder="Enter a book title!" />
-                                    <Button onClick={this.handleFormSubmit}>
-                                        Search
-                                    </Button>
+                            <Card className="p-2 m-2">
+                                <Card.Body >
+                                    <Card.Title className="pl-3" style={{ textAlign: "left" }}>Search for a book!</Card.Title>
+                                    <Row>
+                                        <Col xs={10}>
+                                            <Form.Control name="search"
+                                                value={this.state.search}
+                                                onChange={this.handleInputChange}
+                                                type="text"
+                                                variant="primary"
+                                                size="lg"
+                                                className="p-2 m-2"
+                                                placeholder="Enter a book title!" />
+                                        </Col>
+                                        <Col xs={2}>
+                                            <Button size="lg" className="float-right m-2" onClick={this.handleFormSubmit}>
+                                                Search
+                                            </Button>
+                                        </Col>
+                                    </Row>
+
+
                                 </Card.Body>
                             </Card>
                             {this.state.results.map(book => {
-                                let auth;
-                                if (book.volumeInfo.authors[0]) {
-                                    auth = book.volumeInfo.authors[0]
-                                } else { auth = "No Author Listed"}
+                                //let title, authors, description, image, link;
+
                                 let myBook = {
-                                    "title" : book.volumeInfo.title,
-                                    "authors" : auth,
-                                    "description" : book.volumeInfo.description,
-                                    "image" : book.volumeInfo.imageLinks.thumbnail || "No Image Available",
-                                    "link" : book.volumeInfo.infoLink
+                                    "title": book.volumeInfo.title,
+                                    "authors": book.volumeInfo.authors,
+                                    "description": book.volumeInfo.description,
+                                    "image": book.volumeInfo.imageLinks.thumbnail,
+                                    "link": book.volumeInfo.previewLInk
                                 }
+
                                 return (
                                     <DisplayCard
                                         url={myBook.link}
                                         id={book.id}
                                         title={myBook.title}
+                                        authors={myBook.authors}
                                         description={myBook.description}
                                         key={book.id}
                                         view={this.handleView}
                                         image={myBook.image}
-                                        save={() => {this.handleSave(myBook)}}
+                                        save={() => { this.handleSave(myBook) }}
                                     />
                                 )
                             })}

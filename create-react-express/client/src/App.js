@@ -5,12 +5,13 @@ import Search from "./components/pages/Search"
 import Navbar from "./components/Navbar"
 import Saved from "./components/pages/Saved"
 import { Jumbotron } from "react-bootstrap"
-
+import image from "./images/background.jpg"
 
 let style = {
   background: {
-    backgroundImage: 'url("./images/background.jpg")',
     backgroundAttachment: "fixed",
+    height: "300px",
+    backgroundImage: `url(${image})`,
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -26,7 +27,7 @@ function App() {
       <Router>
         <Navbar />
         <Jumbotron fluid style={style.background}>
-          <div>Testing</div>
+          <h3 style={{color: "white", fontWeight: 700}}>Google Books</h3>
         </Jumbotron>
         <Switch>
           <Route exact path="/" component={Search} />
