@@ -10,6 +10,7 @@ class Saved extends Component {
     results: []
   }
 
+  //load all books
   getBooks() {
     API.loadBooks()
       .then(res => {
@@ -22,10 +23,7 @@ class Saved extends Component {
     this.getBooks();
   }
 
-
-  handleView(url) {
-    window.location.href = url;
-  }
+  //delete our book
   deleteBook = id => {
     API.deleteBook(id)
       .then(res => {
@@ -38,7 +36,7 @@ class Saved extends Component {
   render() {
     return (
       <div>
-        <Container>
+        <Container style={{background: "none"}}>
           <Row>
             <Col>
               {this.state.results.map(book => {
@@ -53,7 +51,6 @@ class Saved extends Component {
                     key={book._id}
                     delete={this.deleteBook}
                     view={this.handleView}
-
                   />
                 )
               })}

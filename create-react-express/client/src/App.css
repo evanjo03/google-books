@@ -25,4 +25,10 @@
 
 body {
   font-family: 'Noto Serif', serif;
+  background: none
+}
+
+html {
+  height: 100vh;
+  background-image: url("./images/texture.png")
 }
