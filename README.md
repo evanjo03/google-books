@@ -1,4 +1,4 @@
-# web-scraper
+# Google Books
 
 The site is a functional MERN single-page app that allows users to search for books using the google books API.  
 
