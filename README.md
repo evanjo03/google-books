@@ -2,6 +2,7 @@
 
 The site is a functional MERN single-page app that allows users to search for books using the google books API.  
 
+## Deployment: https://google-books-tracker.herokuapp.com/
  
 ## Built With
 * Bootstrap framework (React-Bootstrap)
